@@ -44,7 +44,7 @@ func getCertificate(server string) (*certificate, error) {
 		return answer, err
 	}
 	// answer.X509 = smtpcert[0]
-	answer.Certificate.Raw = bytesToString(smtpcert[0].Raw)
+	// answer.Certificate.Raw = bytesToString(smtpcert[0].Raw)
 	/*
 		answer.Certificate.Raw = hex.EncodeToString(smtpcert[0].Raw)
 		answer.Certificate.SHA256 = sha256hash(smtpcert[0].Raw)
