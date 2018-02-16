@@ -1,7 +1,6 @@
 package emaildefense
 
 import (
-	"errors"
 	"net"
 	"strings"
 
@@ -32,8 +31,8 @@ func getDMARC(domain string, nameserver string) (*dmarcrecords, bool, error) {
 	}
 
 	if r.Rcode != dns.RcodeSuccess {
-		err = errors.New("dmarc record lookup not successful")
-		return data, found, err
+		// err = errors.New("dmarc record lookup not successful")
+		return data, found, nil
 	}
 
 	switch rcode := r.MsgHdr.Rcode; rcode {
