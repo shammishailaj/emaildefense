@@ -57,14 +57,16 @@ func getCertificate(fqdn string) (*certificate, error) {
 		return nil, err
 	}
 
-	r.X509, err = x509.ParseCertificate(peerChain[0].Raw)
+	parsed, err := x509.ParseCertificate(peerChain[0].Raw)
 	if err != nil {
 		return nil, err
 	}
-	r.Expires = r.X509.NotAfter
-	r.CommonName = r.X509.Subject.CommonName
-	r.Issuer = r.X509.Issuer.CommonName
-	r.Certificate.SHA256 = r.X509.FingerprintSHA256.Hex()
+
+	// r.X509 = parsed
+
+	r.Expires = parsed.NotAfter
+	r.CommonName = parsed.Subject.CommonName
+	r.Issuer = parsed.Issuer.CommonName
 
 	/*
 		for _, peer := range peerChain {
