@@ -13,9 +13,10 @@ type mxrecords struct {
 }
 
 type hosts struct {
-	Host       string `json:"host,omitempty"`
-	Preference uint16 `json:"preference"`
-	TLSA       *tlsa  `json:"tlsa,omitempty"`
+	Host              string       `json:"host,omitempty"`
+	Preference        uint16       `json:"preference"`
+	TLSA              *tlsa        `json:"tlsa,omitempty"`
+	ServerCertificate *certificate `json:"server_certificate,omitempty"`
 }
 type tlsa struct {
 	Record            string        `json:"record"`
@@ -30,7 +31,7 @@ type tlsarecord struct {
 	Certificate  string `json:"certificate"`
 }
 
-func getMX(domain string, nameserver string) (*mxrecords, bool, error) {
+func getMX(domain string, nameserver string, full bool) (*mxrecords, bool, error) {
 	data := new(mxrecords)
 	var found bool
 
@@ -62,6 +63,9 @@ func getMX(domain string, nameserver string) (*mxrecords, bool, error) {
 				found = true
 			}
 			err = nil
+			if full == true {
+				hosts.ServerCertificate, _ = getCertificate(hosts.Host)
+			}
 			data.Hosts = append(data.Hosts, hosts)
 		}
 	}

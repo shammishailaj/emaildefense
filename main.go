@@ -50,7 +50,7 @@ func Get(domain string, nameserver string, full bool) *Data {
 		return data
 	}
 
-	data.MX, data.FoundTLSA, err = getMX(domain, nameserver)
+	data.MX, data.FoundTLSA, err = getMX(domain, nameserver, full)
 	if err != nil {
 		data.Error = "Error"
 		data.ErrorMessage = err.Error()
