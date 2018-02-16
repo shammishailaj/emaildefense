@@ -61,6 +61,10 @@ func getCertificate(fqdn string) (*certificate, error) {
 	if err != nil {
 		return nil, err
 	}
+	r.Expires = r.X509.NotAfter
+	r.CommonName = r.X509.Subject.CommonName
+	r.Issuer = r.X509.Issuer.CommonName
+	r.Certificate.SHA256 = r.X509.FingerprintSHA256.Hex()
 
 	/*
 		for _, peer := range peerChain {
