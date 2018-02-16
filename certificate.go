@@ -43,6 +43,7 @@ func getCertificate(server string) (*certificate, error) {
 		answer.ConnectionError = err
 		return answer, err
 	}
+	answer.Certificate.SHA256 = sha256hash(smtpcert[0].Raw)
 	// answer.X509 = smtpcert[0]
 	// answer.Certificate.Raw = bytesToString(smtpcert[0].Raw)
 	/*
@@ -68,8 +69,9 @@ func bytesToString(data []byte) string {
 func sha256hash(cert []byte) string {
 	sh256 := sha256.New()
 	sh256.Write(cert)
-	sh256sum := hex.EncodeToString(sh256.Sum(nil))
-	return sh256sum
+	// sh256sum := hex.EncodeToString(sh256.Sum(nil))
+	sh256sum := sh256.Sum(nil)
+	return bytesToString(sh256sum)
 }
 
 func sha512hash(cert []byte) string {
