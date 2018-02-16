@@ -43,7 +43,8 @@ func getCertificate(server string) (*certificate, error) {
 		answer.ConnectionError = err
 		return answer, err
 	}
-	answer.X509 = smtpcert[0]
+	// answer.X509 = smtpcert[0]
+	answer.Certificate.Raw = bytesToString(smtpcert[0].Raw)
 	/*
 		answer.Certificate.Raw = hex.EncodeToString(smtpcert[0].Raw)
 		answer.Certificate.SHA256 = sha256hash(smtpcert[0].Raw)
@@ -58,6 +59,10 @@ func getCertificate(server string) (*certificate, error) {
 	answer.Expires = smtpcert[0].NotAfter
 
 	return answer, nil
+}
+
+func bytesToString(data []byte) string {
+	return string(data[:])
 }
 
 func sha256hash(cert []byte) string {
