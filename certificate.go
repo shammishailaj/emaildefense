@@ -13,12 +13,13 @@ import (
 
 // CertInfo struct for certificate information
 type certificate struct {
-	CommonName      string    `json:"common_name,omitempty"`
-	Issuer          string    `json:"issuer,omitempty"`
-	Expires         time.Time `json:"expires,omitempty"`
-	Certificate     *cert     `json:"certificate,omitempty"`
-	SPKI            *spki     `json:"spki,omitempty"`
-	ConnectionError error     `json:"connection_error,omitempty"`
+	CommonName      string            `json:"common_name,omitempty"`
+	Issuer          string            `json:"issuer,omitempty"`
+	Expires         time.Time         `json:"expires,omitempty"`
+	Certificate     *cert             `json:"certificate,omitempty"`
+	X509            *x509.Certificate `json:"x509,omitempty"`
+	SPKI            *spki             `json:"spki,omitempty"`
+	ConnectionError error             `json:"connection_error,omitempty"`
 }
 
 type cert struct {
@@ -42,15 +43,16 @@ func getCertificate(server string) (*certificate, error) {
 		answer.ConnectionError = err
 		return answer, err
 	}
+	answer.X509 = smtpcert[0]
+	/*
+		answer.Certificate.Raw = hex.EncodeToString(smtpcert[0].Raw)
+		answer.Certificate.SHA256 = sha256hash(smtpcert[0].Raw)
+		answer.Certificate.SHA512 = sha512hash(smtpcert[0].Raw)
 
-	// answer.Certificate.Raw = hex.EncodeToString(smtpcert[0].Raw)
-	answer.Certificate.SHA256 = sha256hash(smtpcert[0].Raw)
-	answer.Certificate.SHA512 = sha512hash(smtpcert[0].Raw)
-
-	answer.SPKI.Raw = hex.EncodeToString(smtpcert[0].RawSubjectPublicKeyInfo)
-	answer.SPKI.SHA256 = sha256hash(smtpcert[0].RawSubjectPublicKeyInfo)
-	answer.SPKI.SHA512 = sha512hash(smtpcert[0].RawSubjectPublicKeyInfo)
-
+		answer.SPKI.Raw = hex.EncodeToString(smtpcert[0].RawSubjectPublicKeyInfo)
+		answer.SPKI.SHA256 = sha256hash(smtpcert[0].RawSubjectPublicKeyInfo)
+		answer.SPKI.SHA512 = sha512hash(smtpcert[0].RawSubjectPublicKeyInfo)
+	*/
 	answer.CommonName = smtpcert[0].Subject.CommonName
 	answer.Issuer = smtpcert[0].Issuer.CommonName
 	answer.Expires = smtpcert[0].NotAfter
